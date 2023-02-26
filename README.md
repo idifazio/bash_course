@@ -4,4 +4,4 @@
 
 This repo contains my final assignment for the Bash course.
 
-I am very excited!
+I am very excited! (Should I be?)
