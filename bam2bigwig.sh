@@ -13,13 +13,19 @@ conda activate bam2bigwig
 input_files=$(ls ${input_folder}/*.bam)
 for file_path in $input_files
 do
-  echo "Converting $(basename ${file_path})..." >> $output_log
-  output_file="${output_folder}/$(basename ${file_path}).bw"
+  file=$(basename ${file_path})
+  echo "Converting ${file}..." >> $output_log
+  output_bam="${output_folder}/${file}"
+  output_bai="${output_folder}/${file}.bai"
+  output_bw="${output_folder}/${file}.bw"
+  echo "Copying bam file..." >> output_log
+  cp $file_path $output_bam
   echo "Creating index..." >> $output_log
-  nice samtools index -M ${file_path} >> $output_log 2>&1
+  nice samtools index -M ${output_bam} -o ${output_bai} >> $output_log 2>&1
   echo "Converting to bw..." >> $output_log
-  nice bamCoverage -b ${file_path} -o ${output_file} >> $output_log 2>&1
+  nice bamCoverage -b ${output_bam} -o ${output_bw} >> $output_log 2>&1
 done
 
-rm ${input_folder}/*.bai
+rm ${output_folder}/*.bam
+rm ${output_folder}/*.bai
 echo "idifazio"
